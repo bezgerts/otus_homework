@@ -30,10 +30,8 @@ create unique index if not exists product_categories_id_uindex on otus.product_c
 
 create table if not exists otus.users
 (
+    id serial not null constraint user_pk primary key,
     first_name varchar(50) not null,
-    id serial not null
-        constraint user_pk
-            primary key,
     last_name varchar(50),
     email varchar(50)
 ) TABLESPACE otus_tablespace;
