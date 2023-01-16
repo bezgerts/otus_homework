@@ -98,3 +98,7 @@ USING otus_db_yaos.otus.product_categories pc
 WHERE p.category_id = pc.id AND pc.name like 'О%'
 RETURNING p.id, p.name;
 
+-- Утилита для вывода всей таблицы в stdout с разделителем |
+-- Подробнее здесь: https://www.postgresql.org/docs/current/sql-copy.html
+\copy otus.users to STDOUT (DELIMITER '|');
+
