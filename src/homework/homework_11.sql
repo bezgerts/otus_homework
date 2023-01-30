@@ -200,6 +200,60 @@ select id, name, cost from otus_db_yaos.otus.products where products.name_lexeme
 --   }
 -- ]
 
+-- Удаляем колонку name_lexeme из таблицы
+alter table otus_db_yaos.otus.products drop column name_lexeme;
+
+
+-- Создание индекса с полнотекстовым поиском без использования дополнительного столбца
+drop index if exists products_title_gin_index;
+CREATE INDEX products_title_gin_index ON otus_db_yaos.otus.products USING GIN (to_tsvector('english', name));
+
+-- Выполняем ANALYSE
+ANALYSE;
+
+explain (costs, verbose, format json)--, analyze)
+SELECT id, name, cost
+FROM otus_db_yaos.otus.products
+WHERE to_tsvector('english', name) @@ to_tsquery('346f4c45c7467e857a27 | 624f1288151eef209944');
+
+-- Результат выполнения
+-- explain (costs, verbose, format json)--, analyze)
+-- SELECT id, name, cost
+-- FROM otus_db_yaos.otus.products
+-- WHERE to_tsvector('english', name) @@ to_tsquery('346f4c45c7467e857a27 | 624f1288151eef209944');
+-- [
+--   {
+--     "Plan": {
+--       "Node Type": "Bitmap Heap Scan",
+--       "Parallel Aware": false,
+--       "Async Capable": false,
+--       "Relation Name": "products",
+--       "Schema": "otus",
+--       "Alias": "products",
+--       "Startup Cost": 12.27,
+--       "Total Cost": 18.61,
+--       "Plan Rows": 2,
+--       "Plan Width": 29,
+--       "Output": ["id", "name", "cost"],
+--       "Recheck Cond": "(to_tsvector('english'::regconfig, (products.name)::text) @@ to_tsquery('346f4c45c7467e857a27 | 624f1288151eef209944'::text))",
+--       "Plans": [
+--         {
+--           "Node Type": "Bitmap Index Scan",
+--           "Parent Relationship": "Outer",
+--           "Parallel Aware": false,
+--           "Async Capable": false,
+--           "Index Name": "products_title_gin_index",
+--           "Startup Cost": 0.00,
+--           "Total Cost": 12.26,
+--           "Plan Rows": 2,
+--           "Plan Width": 0,
+--           "Index Cond": "(to_tsvector('english'::regconfig, (products.name)::text) @@ to_tsquery('346f4c45c7467e857a27 | 624f1288151eef209944'::text))"
+--         }
+--       ]
+--     }
+--   }
+-- ]
+
 -- Создание индекса только для тех записей, у которых category_id = 1
 drop index if exists products_cost_for_first_category_id_index;
 create index products_cost_for_first_category_id_index on otus_db_yaos.otus.products(cost) where category_id = 1;
