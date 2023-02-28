@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  otusdb:
+    restart: always
+    container_name: mysql-sysbench
+    image: mysql-sysbench
+    build: .
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345
+    command:
+      --init-file /init.sql
+    volumes:
+      - data:/var/lib/mysql
+      - ./init.sql:/init.sql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    expose:
+      - "3306"
+    ports:
+      - "3309:3306"
+volumes:
+  data:
