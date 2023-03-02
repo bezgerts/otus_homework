@@ -2,7 +2,7 @@ create schema otus;
 
 create table otus.product_categories
 (
-    id   int auto_increment comment 'Идентификатор категории продуктов',
+    id   int unsigned auto_increment comment 'Идентификатор категории продуктов',
     name VARCHAR(255) not null comment 'Название категории',
     constraint product_categories_pk
         primary key (id)
@@ -13,10 +13,11 @@ create unique index product_categories_id_uindex on otus.product_categories (id)
 
 create table otus.products
 (
-    id          int auto_increment comment 'Идентификатор продукта',
-    name        varchar(255) not null comment 'Название продукта',
-    category_id int          not null,
-    cost        int          not null,
+    id                      int             unsigned auto_increment comment 'Идентификатор продукта',
+    name                    varchar(255)    not null comment 'Название продукта',
+    category_id             int             unsigned not null,
+    cost                    decimal         not null,
+    attributes_json         JSON            comment 'Джейсон с аттрибутами продукта',
     constraint products_pk
         primary key (id),
     constraint products_product_categories_id_fk
@@ -27,7 +28,7 @@ create unique index products_id_uindex on otus.products (id);
 
 create table if not exists otus.users
 (
-    id int auto_increment comment 'Идентификатор пользователя',
+    id int unsigned auto_increment comment 'Идентификатор пользователя',
     first_name varchar(50) not null comment 'Имя',
     last_name varchar(50) comment 'Фамилия',
     email varchar(50) comment 'Электронный адрес',
@@ -38,7 +39,7 @@ create unique index user_id_uindex on otus.users (id);
 
 create table if not exists otus.order_statuses
 (
-    id int auto_increment comment 'Идентификатор статуса заказа',
+    id int unsigned auto_increment comment 'Идентификатор статуса заказа',
     status varchar(50) not null comment 'Статус заказа',
     constraint order_statuses_pk
         primary key (id)
@@ -48,7 +49,7 @@ create unique index order_statuses_id_uindex on otus.order_statuses (id);
 
 create table if not exists otus.payment_types
 (
-    id int auto_increment comment 'Идентификатор типа оплаты',
+    id int unsigned auto_increment comment 'Идентификатор типа оплаты',
     payment_type varchar(50) not null comment 'Типы оплаты',
     constraint payment_types_pk
         primary key (id)
@@ -56,11 +57,10 @@ create table if not exists otus.payment_types
 
 create table if not exists otus.orders
 (
-    id int auto_increment,
-
-    user_id integer not null comment 'Идентификатор пользователя, оформившего заказ',
-    order_status_id integer not null comment 'Идентификатор статуса заказа',
-    payment_type_id integer not null comment 'Тип оплаты заказа',
+    id int unsigned auto_increment comment 'Идентификатор заказа',
+    user_id int unsigned not null comment 'Идентификатор пользователя, оформившего заказ',
+    order_status_id int unsigned not null comment 'Идентификатор статуса заказа',
+    payment_type_id int unsigned not null comment 'Тип оплаты заказа',
     constraint order_pk
         primary key (id),
     constraint order_user_id__fk
@@ -76,9 +76,9 @@ create unique index order_id_uindex on otus.orders (id);
 
 create table if not exists otus.order_product
 (
-    order_id integer not null comment 'Идентификатор заказа',
-    product_id integer not null comment 'Идентификатор продукта',
-    count integer not null comment 'Количество',
+    order_id int unsigned not null comment 'Идентификатор заказа',
+    product_id int unsigned not null comment 'Идентификатор продукта',
+    count mediumint unsigned not null comment 'Количество',
     constraint order_product_pk
         primary key (order_id, product_id),
     constraint order_product_order_id_fk
@@ -106,16 +106,16 @@ INSERT INTO otus.product_categories (id, name)
 
 -- Добавление продуктов
 
-INSERT INTO otus.products (id, name, cost, category_id)
-    VALUES (1, 'Хлеб', 59, 3),
-           (2, 'Молоко', 100, 3),
-           (3, 'Халва', 150, 3),
-           (4, 'Колбаса', 200, 3),
-           (5, 'Холодильник', 24999, 2),
-           (6, 'Телевизор', 50000, 2),
-           (7, 'Посудомойка', 32149, 2),
-           (8, 'Джинсы', 3499, 1),
-           (9, 'Рубашка', 2999, 1);
+INSERT INTO otus.products (id, name, cost, category_id, attributes_json)
+    VALUES (1, 'Хлеб', 59, 3, '{"weight":"800g", "type":"ржаной"}'),
+           (2, 'Молоко', 100, 3, '{"volume":"1L", "fat":"5%"}'),
+           (3, 'Халва', 150, 3, null),
+           (4, 'Колбаса', 200, 3, '{"weight":"1kg"}'),
+           (5, 'Холодильник', 24999, 2, '{}'),
+           (6, 'Телевизор', 50000, 2, null),
+           (7, 'Посудомойка', 32149, 2, null),
+           (8, 'Джинсы', 3499, 1, null),
+           (9, 'Рубашка', 2999, 1, '{"color": "blue", "size":"M"}');
 
 -- Добавление типов оплаты
 
