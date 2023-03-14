@@ -12,6 +12,7 @@ services:
       --init-file /init.sql
     volumes:
       - data:/var/lib/mysql
+      - ./csv:/csv
       - ./init.sql:/init.sql
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
     expose:
