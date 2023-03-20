@@ -26,4 +26,4 @@ select p.category_id, min(p.cost), max(p.cost) from otus.products p group by cat
 # количество товаров в категории с роллапом
 select pc.id, count(p.id) as 'количество товаров в категории' from otus.products p
     left join otus.product_categories pc on pc.id = p.category_id
-group by (pc.id) with rollup ;
+group by (pc.id) with rollup;
