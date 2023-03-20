@@ -21,7 +21,7 @@ group by (u.id)
 having sum > 500;
 
 # минимальная и максимальная цена продуктов в определенной категории
-select p.category_id, min(p.cost) as m, max(p.cost) from otus.products p group by category_id;
+select p.category_id, min(p.cost), max(p.cost) from otus.products p group by category_id;
 
 # количество товаров в категории с роллапом
 select pc.id, count(p.id) as 'количество товаров в категории' from otus.products p
