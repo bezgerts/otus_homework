@@ -18,6 +18,7 @@ create table otus.products
     category_id             int             unsigned not null,
     cost                    decimal         not null,
     attributes_json         JSON            comment 'Джейсон с аттрибутами продукта',
+    description             text            not null comment 'Описание товара',
     constraint products_pk
         primary key (id),
     constraint products_product_categories_id_fk
@@ -106,16 +107,16 @@ INSERT INTO otus.product_categories (id, name)
 
 -- Добавление продуктов
 
-INSERT INTO otus.products (id, name, cost, category_id, attributes_json)
-    VALUES (1, 'Хлеб', 59, 3, '{"weight":"800g", "type":"ржаной"}'),
-           (2, 'Молоко', 100, 3, '{"volume":"1L", "fat":"5%"}'),
-           (3, 'Халва', 150, 3, null),
-           (4, 'Колбаса', 200, 3, '{"weight":"1kg"}'),
-           (5, 'Холодильник', 24999, 2, '{}'),
-           (6, 'Телевизор', 50000, 2, null),
-           (7, 'Посудомойка', 32149, 2, null),
-           (8, 'Джинсы', 3499, 1, null),
-           (9, 'Рубашка', 2999, 1, '{"color": "blue", "size":"M"}');
+INSERT INTO otus.products (id, name, cost, category_id, attributes_json, description)
+    VALUES (1, 'Хлеб', 59, 3, '{"weight":"800g", "type":"ржаной"}','вкусный'),
+           (2, 'Молоко', 100, 3, '{"volume":"1L", "fat":"5%"}', 'коровье'),
+           (3, 'Халва', 150, 3, null, 'подсолнечная'),
+           (4, 'Колбаса', 200, 3, '{"weight":"1kg"}', 'вареная'),
+           (5, 'Холодильник', 24999, 2, '{}', 'двухкамерный'),
+           (6, 'Телевизор', 50000, 2, null, 'жк'),
+           (7, 'Посудомойка', 32149, 2, null, 'хорошо отмывает посуду'),
+           (8, 'Джинсы', 3499, 1, null, 'левис'),
+           (9, 'Рубашка', 2999, 1, '{"color": "blue", "size":"M"}', 'синяя');
 
 -- Добавление типов оплаты
 
