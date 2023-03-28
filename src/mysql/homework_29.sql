@@ -172,6 +172,8 @@ EXPLAIN FORMAT=JSON select u.id, u.first_name, u.last_name, SUM(p.cost * op.coun
 # }
 
 # Просмотр эксплейна аналайза запроса
+# Самый большой кост у внешней Nested loop на строке 185
+# Nested loop left join  (cost=2.15 rows=1) (actual time=0.076..0.170 rows=8 loops=1)
 EXPLAIN ANALYZE select u.id, u.first_name, u.last_name, SUM(p.cost * op.count) as sum
     from otus.orders o
     left join otus.order_product op on o.id = op.order_id
