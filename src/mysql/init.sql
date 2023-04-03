@@ -60,6 +60,7 @@ create table if not exists otus.orders
 (
     id int unsigned auto_increment comment 'Идентификатор заказа',
     user_id int unsigned not null comment 'Идентификатор пользователя, оформившего заказ',
+    creation_datetime datetime not null comment 'Дата и время создания заказа',
     order_status_id int unsigned not null comment 'Идентификатор статуса заказа',
     payment_type_id int unsigned not null comment 'Тип оплаты заказа',
     constraint order_pk
@@ -134,12 +135,12 @@ INSERT INTO otus.order_statuses (id, status)
 
 -- Добавление заказов
 
-INSERT INTO otus.orders (id, user_id, order_status_id, payment_type_id)
-    VALUES (1, 1, 2, 2),
-           (2, 2, 1, 1),
-           (3, 3, 2, 2),
-           (4, 1, 1, 1),
-           (5, 3, 1, 1);
+INSERT INTO otus.orders (id, user_id, creation_datetime, order_status_id, payment_type_id)
+    VALUES (1, 1, '2023-04-03 11:36:22', 2, 2),
+           (2, 2, '2022-04-03 11:36:22', 1, 1),
+           (3, 3, '2023-03-03 14:36:22', 2, 2),
+           (4, 1, '2023-02-05 11:38:22', 1, 1),
+           (5, 3, '2023-04-04 16:36:22', 1, 1);
 
 -- Добавление продуктов в заказы
 
