@@ -13,8 +13,8 @@ CREATE PROCEDURE otus.get_products(
     OUT sql_text TEXT)              # выполняемый запрос
 BEGIN
 
-    SET @first = true;
-    SET @s = CONCAT('SELECT * FROM otus.products p WHERE ');
+    SET @first = false;
+    SET @s = CONCAT('SELECT * FROM otus.products p WHERE 1=1 ');
 
     if (min_cost is not null) then
         if (@first) then SET @first = false; else SET @s = CONCAT(@s, ' AND '); end if;
